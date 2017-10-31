@@ -253,6 +253,16 @@
 ;; * (repli '(a b c) 3)
 ;; (A A A B B B C C C)
 
-
 (defn repli [lst n]
   (apply concat (map #(repeat n %) lst)))
+
+
+;; P16 (**) Drop every N'th element from a list.
+;; Example:
+;; * (drop '(a b c d e f g h i k) 3)
+;; (A B D E G H K)
+
+(defn drop [lst n]
+  (for [[a i] (map vector lst (range 1 (inc (count lst)))) :when (not (= (mod i n) 0))] a))
+
+

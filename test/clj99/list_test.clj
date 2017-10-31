@@ -130,3 +130,10 @@
     (is (= (repli '() 3) '()))
     (is (= (repli '(a b c c d) 3)
            '(a a a b b b c c c c c c d d d)))))
+
+
+(deftest p16-test
+  (testing "Drop every N'th element from a list."
+    (is (= (drop '(a b c d e f g h i k) 3)
+           '(a b d e g h k)))))
+
