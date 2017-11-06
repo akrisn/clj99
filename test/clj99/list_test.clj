@@ -156,3 +156,8 @@
     (is (= (rotate '(a b c d e f g h) -2)
            '(g h a b c d e f)))))
 
+(deftest p20-test
+  (testing "Remove the K'th element from a list."
+    (is (= (remove-at '(a b c d) 2)
+           '(a c d)))))
+

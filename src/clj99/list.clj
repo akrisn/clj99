@@ -302,3 +302,17 @@
       (concat b a))
     (rotate lst (+ (count lst) n))))
 
+;; P20 (*) Remove the K'th element from a list.
+;; Example:
+;; * (remove-at '(a b c d) 2)
+;; (A C D)
+
+(defn remove-at [lst n]
+  (apply concat ((fn remove-at-sub [x n]
+                   (if (or (empty? x) (= n 1))
+                     (list '() (rest x))
+                     (let [[a b] (remove-at-sub (rest x) (dec n))]
+                       (list (conj a (first x)) b))))
+                 lst n)))
+
+
