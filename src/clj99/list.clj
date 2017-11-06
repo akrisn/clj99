@@ -286,3 +286,19 @@
        (slice-sub1 (rest lst) (dec a) (dec b))))
    lst a b))
 
+;; P19 (**) Rotate a list N places to the left.
+;; Examples:
+;; * (rotate '(a b c d e f g h) 3)
+;; (D E F G H A B C)
+;;
+;; * (rotate '(a b c d e f g h) -2)
+;; (G H A B C D E F)
+;;
+;; Hint: Use the predefined functions length and append, as well as the result of problem P17.
+
+(defn rotate [lst n]
+  (if (> n 0)
+    (let [[a b] (split lst n)]
+      (concat b a))
+    (rotate lst (+ (count lst) n))))
+
