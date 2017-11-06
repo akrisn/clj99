@@ -144,3 +144,9 @@
            '((a b c) (d e f g h i k))))))
 
 
+(deftest p18-test
+  (testing "Extract a slice from a list."
+    (is (= (slice '(a b c d e f g h i k) 3 7)
+           '(c d e f g)))))
+
+
