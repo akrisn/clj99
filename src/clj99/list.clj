@@ -32,7 +32,6 @@
       y
       (recur (rest x) (list (first x))))))
 
-
 ;;; P02 (*) Find the last but one box of a list.
 ;;; Example:
 ;;; * (my-but-last '(a b c d))
@@ -73,7 +72,6 @@
       (first x)
       (recur (rest x) (dec c)))))
 
-
 ;; P04 (*) Find the number of elements of a list.
 
 ;; Built-in is count.
@@ -83,7 +81,6 @@
     (if (empty? x)
       c
       (recur (rest x) (inc c)))))
-
 
 ;; P05 (*) Reverse a list.
 
@@ -95,13 +92,11 @@
       ret
       (recur (rest x) (cons (first x) ret)))))
 
-
 ;; P06 (*) Find out whether a list is a palindrome.
 ;; A palindrome can be read forward or backward; e.g. (x a m a x).
 
 (defn palindrome? [lst]
   (= (reverse lst) lst))
-
 
 ;; P07 (**) Flatten a nested list structure.
 ;; Transform a list, possibly holding lists as elements into a `flat' list
@@ -128,7 +123,6 @@
     (reduce concat (map my-flatten lst))
     (list lst)))
 
-
 ;; P08 (**) Eliminate consecutive duplicates of list elements.
 ;; If a list contains repeated elements they should be replaced with a single copy of the element.
 ;; The order of the elements should not be changed.
@@ -146,7 +140,6 @@
     (if (empty? lst)
       lst
       (cons (first lst) (compress (skip (first lst) (rest lst)))))))
-
 
 ;; P09 (**) Pack consecutive duplicates of list elements into sublists.
 ;; If a list contains repeated elements they should be placed in separate sublists.
@@ -168,7 +161,6 @@
       (let [[x y] (pack-sub lst)]
         (cons x (pack y))))))
 
-
 ;; P10 (*) Run-length encoding of a list.
 ;; Use the result of problem P09 to implement the so-called run-length encoding
 ;; data compression method. Consecutive duplicates of elements are encoded as
@@ -180,7 +172,6 @@
 
 (defn encode [lst]
   (for [x (pack lst)] (list (count x) (first x))))
-
 
 ;; P11 (*) Modified run-length encoding.
 ;; Modify the result of problem P10 in such a way that if an element has no duplicates
@@ -198,7 +189,6 @@
         (first x)
         (list c (first x))))))
 
-
 ;; P12 (**) Decode a run-length encoded list.
 ;; Given a run-length code list generated as specified in problem P11.
 ;; Construct its uncompressed version.
@@ -209,7 +199,6 @@
                          (repeat (first x) (second x))
                          (list x)))
                      lst)))
-
 
 ;; P13 (**) Run-length encoding of a list (direct solution).
 ;; Implement the so-called run-length encoding data compression method directly.
@@ -235,7 +224,6 @@
       (let [[x y] (encode-sub lst)]
         (cons x (encode-direct y))))))
 
-
 ;; P14 (*) Duplicate the elements of a list.
 ;; Example:
 ;; * (dupli '(a b c c d))
@@ -247,7 +235,6 @@
     (let [x (first lst)]
       (cons x (cons x (dupli (rest lst)))))))
 
-
 ;; P15 (**) Replicate the elements of a list a given number of times.
 ;; Example:
 ;; * (repli '(a b c) 3)
@@ -255,7 +242,6 @@
 
 (defn repli [lst n]
   (apply concat (map #(repeat n %) lst)))
-
 
 ;; P16 (**) Drop every N'th element from a list.
 ;; Example:
@@ -265,4 +251,18 @@
 (defn drop [lst n]
   (for [[a i] (map vector lst (range 1 (inc (count lst)))) :when (not (= (mod i n) 0))] a))
 
+;; P17 (*) Split a list into two parts; the length of the first part is given.
+;; Do not use any predefined predicates.
+;;
+;; Example:
+;; * (split '(a b c d e f g h i k) 3)
+;; ( (A B C) (D E F G H I K))
+
+(defn split [lst n]
+  ((fn split-sub [x n]
+     (if (or (empty? x) (= n 0))
+       (list '() x)
+       (let [[a b] (split-sub (rest x) (dec n))]
+         (list (conj a (first x)) b))))
+   lst n))
 
