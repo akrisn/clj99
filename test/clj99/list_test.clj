@@ -161,3 +161,8 @@
     (is (= (remove-at '(a b c d) 2)
            '(a c d)))))
 
+(deftest p21-test
+  (testing "Insert an element at a given position into a list."
+    (is (= (insert-at 'alfa '(a b c d) 2)
+           '(a alfa b c d)))))
+

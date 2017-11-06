@@ -315,4 +315,15 @@
                        (list (conj a (first x)) b))))
                  lst n)))
 
+;; P21 (*) Insert an element at a given position into a list.
+;; Example:
+;; * (insert-at 'alfa '(a b c d) 2)
+;; (A ALFA B C D)
 
+(defn insert-at [elem lst n]
+  ((fn insert-at-sub [e x n]
+     (if (or (empty? x) (= n 1))
+       (conj x e)
+       (let [y (insert-at-sub e (rest x) (dec n))]
+         (conj y (first x)))))
+   elem lst n))
