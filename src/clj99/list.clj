@@ -327,3 +327,21 @@
        (let [y (insert-at-sub e (rest x) (dec n))]
          (conj y (first x)))))
    elem lst n))
+
+;; P22 (*) Create a list containing all integers within a given range.
+;; If first argument is smaller than second, produce a list in decreasing order.
+;; Example:
+;; * (range 4 9)
+;; (4 5 6 7 8 9)
+
+;; There is a built-in function.
+;;(defn my-range [a b]
+;;  (range a (inc b)))
+
+(defn my-range [a b]
+  (if (= a b)
+    (list a)
+    (if (< a b)
+      (conj (my-range (inc a) b) a)
+      (conj (my-range (dec a) b) a))))
+

@@ -166,3 +166,10 @@
     (is (= (insert-at 'alfa '(a b c d) 2)
            '(a alfa b c d)))))
 
+(deftest p22-test
+  (testing "Create a list containing all integers within a given range."
+    (is (= (my-range 4 9)
+           '(4 5 6 7 8 9)))
+    (is (= (my-range 7 3)
+           '(7 6 5 4 3)))))
+
