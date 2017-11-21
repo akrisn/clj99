@@ -173,3 +173,11 @@
     (is (= (my-range 7 3)
            '(7 6 5 4 3)))))
 
+;; Mocking rand is necessary but I couldn't find proper way in Clojure.
+;; Found some interesting techniques in StackOverFlow.
+;; https://stackoverflow.com/questions/24007063/how-to-generated-repeatable-random-sequences-with-rand-int
+;; (deftest p23-test
+;;   (testing "Extract a given number of randomly selected elements from a list."
+;;     (is (= (rnd-select '(a b c d e f g h) 3)
+;;            '(e d a)))))
+
