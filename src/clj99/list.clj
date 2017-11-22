@@ -356,8 +356,9 @@
 (defn rnd-select [lst n]
   (if (= n 0)
     nil
-    (conj (rnd-select lst (dec n))
-          (element-at lst (inc (rand-int (my-count lst)))))))
+    (let [r (inc (rand-int (my-count lst)))]
+      (conj (rnd-select (remove-at lst r) (dec n))
+            (element-at lst r)))))
 
 
 ;; P24 (*) Lotto: Draw N different random numbers from the set 1..M.
@@ -370,3 +371,15 @@
 
 (defn lotto-select [n m]
   (rnd-select (my-range 1 m) n))
+
+
+;; P25 (*) Generate a random permutation of the elements of a list.
+;; Example:
+;; * (rnd-permu '(a b c d e f))
+;; (B A D C E F)
+;;
+;; Hint: Use the solution of problem P23.
+
+(defn rnd-permu [lst]
+  (rnd-select lst (my-count lst)))
+
