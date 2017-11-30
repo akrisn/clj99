@@ -181,3 +181,18 @@
 ;;     (is (= (rnd-select '(a b c d e f g h) 3)
 ;;            '(e d a)))))
 
+(deftest p26-test
+  (testing "Generate the combinations of K distinct objects chosen from the N elements of a list"
+    (is (= (combination 3 '(a b c d e f))
+           '((a b c) (a b d) (a b e) (a b f)
+             (a c d) (a c e) (a c f)
+             (a d e) (a d f)
+             (a e f)
+             (b c d) (b c e) (b c f)
+             (b d e) (b d f)
+             (b e f)
+             (c d e) (c d f)
+             (c e f)
+             (d e f))))))
+
+
