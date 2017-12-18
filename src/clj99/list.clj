@@ -30,7 +30,7 @@
   (loop [x coll y nil]
     (if (empty? x)
       y
-      (recur (rest x) (list (first x))))))
+      (recur (rest x) x))))
 
 ;;; P02 (*) Find the last but one box of a list.
 ;;; Example:
