@@ -24,13 +24,14 @@
 
 ;; However, this is O(N^2) since count is O(N).
 
-
 ;; O(N) implementation.
 (defn my-last [coll]
-  (loop [x coll y nil]
-    (if (empty? x)
-      y
-      (recur (rest x) x))))
+  (loop [x coll]
+    (let [y (rest x)]
+      (if (empty? y)
+        x
+        (recur y)))))
+
 
 ;;; P02 (*) Find the last but one box of a list.
 ;;; Example:

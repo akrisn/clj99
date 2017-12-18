@@ -10,7 +10,7 @@
     (is (= (my-last '(a))
            '(a)))
     (is (= (my-last '())
-           nil))))
+           ()))))
 
 
 (deftest p02-test
