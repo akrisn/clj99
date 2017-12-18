@@ -20,7 +20,7 @@
     (is (= (my-but-last '(a))
            '(a)))
     (is (= (my-but-last '())
-           nil))))
+           ()))))
 
 ;; * (element-at '(a b c d e) 3)
 ;; C

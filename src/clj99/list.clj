@@ -44,16 +44,11 @@
 
 ;; Recursive implementation
 (defn my-but-last [coll]
-  (loop [x coll ret nil c 0]
-    (if (empty? x)
-      ret
-      (recur (rest x)
-             (if (= c 0)
-               (list (first x))
-               (if (= c 1)
-                 (list (first ret) (first x))
-                 (list (first (rest ret)) (first x))))
-             (inc c)))))
+  (loop [x coll]
+    (if (empty? (rest (rest x)))
+      x
+      (recur (rest x)))))
+
 
 ;; The above code constructs intermediate return value and destructs again and again.
 ;; (take 2 (rev x)) can be more efficient.
