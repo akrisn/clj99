@@ -24,7 +24,7 @@
 
 ;; However, this is O(N^2) since count is O(N).
 
-;; O(N) implementation.
+;; O(N) recursive implementation.
 (defn my-last [coll]
   (loop [x coll]
     (let [y (rest x)]
@@ -56,7 +56,7 @@
 ;; * (element-at '(a b c d e) 3)
 ;; C
 
-;; Built in is nth (0-index).
+;; Built-in is nth (0-index).
 
 (defn element-at [coll idx]
   (loop [x coll c idx]
