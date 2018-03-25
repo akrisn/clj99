@@ -112,7 +112,7 @@
 
 (defn my-flatten [coll]
   (if (seq? coll)
-    (reduce concat (map my-flatten coll))
+    (mapcat my-flatten coll)
     (list coll)))
 
 ;; P08 (**) Eliminate consecutive duplicates of list elements.
