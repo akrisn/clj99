@@ -26,12 +26,9 @@
 
 ;; O(N) recursive implementation.
 (defn my-last [coll]
-  (loop [x coll]
-    (let [y (rest x)]
-      (if (empty? y)
-        x
-        (recur y)))))
-
+  (if (next coll)
+    (recur (next coll))
+    (first coll)))
 
 ;;; P02 (*) Find the last but one box of a list.
 ;;; Example:
@@ -49,6 +46,7 @@
       x
       (recur (rest x)))))
 
+(my-but-last '(a b c d))
 
 ;; P03 (*) Find the K'th element of a list.
 ;; The first element in the list is number 1.
