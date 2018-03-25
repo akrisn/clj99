@@ -41,12 +41,9 @@
 
 ;; Recursive implementation
 (defn my-but-last [coll]
-  (loop [x coll]
-    (if (empty? (rest (rest x)))
-      x
-      (recur (rest x)))))
-
-(my-but-last '(a b c d))
+  (if (nnext coll)
+    (recur (next coll))
+    coll))
 
 ;; P03 (*) Find the K'th element of a list.
 ;; The first element in the list is number 1.
