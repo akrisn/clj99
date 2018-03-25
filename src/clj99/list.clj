@@ -28,7 +28,7 @@
 (defn my-last [coll]
   (if (next coll)
     (recur (next coll))
-    (first coll)))
+    coll))
 
 ;;; P02 (*) Find the last but one box of a list.
 ;;; Example:
