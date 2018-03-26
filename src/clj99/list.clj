@@ -248,7 +248,7 @@
 
 (defn split [coll n]
   ((fn split-sub [x n]
-     (if (and (seq x) (> n 0))
+     (if (and (seq x) (pos? n))
        (let [[a b] (split-sub (rest x) (dec n))]
          (list (conj a (first x)) b))
        (list '() x)))
@@ -268,7 +268,7 @@
      (if (and (seq coll) (> a 1))
        (slice-sub1 (rest coll) (dec a) (dec b))
        ((fn slice-sub2 [coll b]
-         (if (and (seq coll) (> b 0))
+         (if (and (seq coll) (pos? b))
            (conj (slice-sub2 (rest coll) (dec b)) (first coll))
            '()))
         coll b)))
@@ -285,7 +285,7 @@
 ;; Hint: Use the predefined functions length and append, as well as the result of problem P17.
 
 (defn rotate [coll n]
-  (if (> n 0)
+  (if (pos? n)
     (let [[a b] (split coll n)]
       (concat b a))
     (rotate coll (+ (count coll) n))))
