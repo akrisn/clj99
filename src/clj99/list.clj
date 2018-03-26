@@ -137,11 +137,11 @@
 (defn pack [coll]
   (let [pack-sub (fn [x]
                    (loop [a (first x) y (list (first x)) z (rest x)]
-                     (if (empty? z)
-                       [y z]
+                     (if (seq z)
                        (if (= (first z) a)
                          (recur a (conj y a) (rest z))
-                         [y z]))))]
+                         [y z])
+                       [y z])))]
     (if (seq coll)
       (let [[x y] (pack-sub coll)]
         ;; use recur
@@ -268,9 +268,9 @@
      (if (and (seq coll) (> a 1))
        (slice-sub1 (rest coll) (dec a) (dec b))
        ((fn slice-sub2 [coll b]
-         (if (or (empty? coll) (= b 0))
-           '()
-           (conj (slice-sub2 (rest coll) (dec b)) (first coll))))
+         (if (and (seq coll) (> b 0))
+           (conj (slice-sub2 (rest coll) (dec b)) (first coll))
+           '()))
         coll b)))
    coll a b))
 
