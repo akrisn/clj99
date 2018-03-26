@@ -158,8 +158,7 @@
 ;; ((4 A) (1 B) (2 C) (2 A) (1 D)(4 E))
 
 (defn encode [coll]
-  ;; TODO: mapcat?
-  (for [x (pack coll)] (list (count x) (first x))))
+  (map #(list (count %) (first %)) (pack coll)))
 
 ;; P11 (*) Modified run-length encoding.
 ;; Modify the result of problem P10 in such a way that if an element has no duplicates
@@ -182,11 +181,11 @@
 ;; Construct its uncompressed version.
 
 (defn decode [coll]
-  (apply concat (map (fn [x]
-                       (if (list? x)
-                         (repeat (first x) (second x))
-                         (list x)))
-                     coll)))
+  (mapcat (fn [x]
+            (if (list? x)
+              (repeat (first x) (second x))
+              (list x)))
+          coll))
 
 ;; P13 (**) Run-length encoding of a list (direct solution).
 ;; Implement the so-called run-length encoding data compression method directly.
@@ -229,7 +228,7 @@
 ;; (A A A B B B C C C)
 
 (defn repli [coll n]
-  (apply concat (map #(repeat n %) coll)))
+  (mapcat #(repeat n %) coll))
 
 ;; P16 (**) Drop every N'th element from a list.
 ;; Example:
@@ -237,7 +236,8 @@
 ;; (A B D E G H K)
 
 (defn drop [coll n]
-  (for [[a i] (map vector coll (range 1 (inc (count coll)))) :when (not (= (mod i n) 0))] a))
+  (for [[a i] (map vector coll (range 1 (inc (count coll))))
+        :when (not (= (mod i n) 0))] a))
 
 ;; P17 (*) Split a list into two parts; the length of the first part is given.
 ;; Do not use any predefined predicates.
