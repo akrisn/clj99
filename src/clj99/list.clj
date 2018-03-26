@@ -123,7 +123,6 @@
               (recur a (rest x))
               x))]
     (if (seq coll)
-      ;; TODO: use recur
       (cons (first coll) (compress (skip (first coll) (rest coll))))
       coll)))
 
@@ -136,7 +135,7 @@
 
 (defn pack [coll]
   (letfn [(pack-sub [x]
-            (loop [a (first x) y (list (first x)) z (rest x)]
+            (loop [a (first x), y (list (first x)), z (rest x)]
               (if (seq z)
                 (if (= (first z) a)
                   (recur a (conj y a) (rest z))
@@ -144,7 +143,6 @@
                 [y z])))]
     (if (seq coll)
       (let [[x y] (pack-sub coll)]
-        ;; use recur
         (cons x (pack y)))
       coll)))
 
