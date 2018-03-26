@@ -54,10 +54,9 @@
 ;; Built-in is nth (0-index).
 
 (defn element-at [coll idx]
-  (loop [x coll c idx]
-    (if (<= c 1)
-      (first x)
-      (recur (rest x) (dec c)))))
+  (if (<= idx 1)
+    (first coll)
+    (recur (rest coll) (dec idx))))
 
 ;; P04 (*) Find the number of elements of a list.
 
@@ -65,9 +64,9 @@
 
 (defn my-count [coll]
   (loop [x coll c 0]
-    (if (empty? x)
-      c
-      (recur (rest x) (inc c)))))
+    (if (seq x)
+      (recur (rest x) (inc c))
+      c)))
 
 ;; P05 (*) Reverse a list.
 
@@ -75,9 +74,9 @@
 
 (defn my-reverse [coll]
   (loop [x coll ret '()]
-    (if (empty? x)
-      ret
-      (recur (rest x) (cons (first x) ret)))))
+    (if (seq x)
+      (recur (rest x) (cons (first x) ret))
+      ret)))
 
 ;; P06 (*) Find out whether a list is a palindrome.
 ;; A palindrome can be read forward or backward; e.g. (x a m a x).
@@ -120,13 +119,13 @@
 
 (defn compress [coll]
   (let [skip (fn [a x]
-               (loop [y x]
-                 (if (= (first y) a)
-                   (recur (rest y))
-                   y)))]
-    (if (empty? coll)
-      coll
-      (cons (first coll) (compress (skip (first coll) (rest coll)))))))
+               (if (= (first x) a)
+                 (recur a (rest x))
+                 x))]
+    (if (seq coll)
+      ;; TODO: use recur
+      (cons (first coll) (compress (skip (first coll) (rest coll))))
+      coll)))
 
 ;; P09 (**) Pack consecutive duplicates of list elements into sublists.
 ;; If a list contains repeated elements they should be placed in separate sublists.
@@ -143,10 +142,11 @@
                        (if (= (first z) a)
                          (recur a (conj y a) (rest z))
                          [y z]))))]
-    (if (empty? coll)
-      '()
+    (if (seq coll)
       (let [[x y] (pack-sub coll)]
-        (cons x (pack y))))))
+        ;; use recur
+        (cons x (pack y)))
+      coll)))
 
 ;; P10 (*) Run-length encoding of a list.
 ;; Use the result of problem P09 to implement the so-called run-length encoding
@@ -158,6 +158,7 @@
 ;; ((4 A) (1 B) (2 C) (2 A) (1 D)(4 E))
 
 (defn encode [coll]
+  ;; TODO: mapcat?
   (for [x (pack coll)] (list (count x) (first x))))
 
 ;; P11 (*) Modified run-length encoding.
@@ -201,15 +202,15 @@
   (let [encode-sub (fn [x]
                      (let [a (first x)]
                        (loop [n 1 y (rest x)]
-                         (if (empty? y)
-                           [(if (= n 1) a (list n a)) y]
+                         (if (seq y)
                            (if (= (first y) a)
                              (recur (inc n) (rest y))
-                             [(if (= n 1) a (list n a)) y])))))]
-    (if (empty? coll)
-      '()
+                             [(if (= n 1) a (list n a)) y])
+                           [(if (= n 1) a (list n a)) y]))))]
+    (if (seq coll)
       (let [[x y] (encode-sub coll)]
-        (cons x (encode-direct y))))))
+        (cons x (encode-direct y)))
+      coll)))
 
 ;; P14 (*) Duplicate the elements of a list.
 ;; Example:
@@ -217,10 +218,10 @@
 ;; (A A B B C C C C D D)
 
 (defn dupli [coll]
-  (if (empty? coll)
-    '()
+  (if (seq coll)
     (let [x (first coll)]
-      (cons x (cons x (dupli (rest coll)))))))
+      (cons x (cons x (dupli (rest coll)))))
+    coll))
 
 ;; P15 (**) Replicate the elements of a list a given number of times.
 ;; Example:
@@ -247,10 +248,10 @@
 
 (defn split [coll n]
   ((fn split-sub [x n]
-     (if (or (empty? x) (= n 0))
-       (list '() x)
+     (if (and (seq x) (> n 0))
        (let [[a b] (split-sub (rest x) (dec n))]
-         (list (conj a (first x)) b))))
+         (list (conj a (first x)) b))
+       (list '() x)))
    coll n))
 
 ;; P18 (**) Extract a slice from a list.
@@ -264,13 +265,13 @@
 
 (defn slice [coll a b]
   ((fn slice-sub1 [coll a b]
-     (if (or (empty? coll) (<= a 1))
+     (if (and (seq coll) (> a 1))
+       (slice-sub1 (rest coll) (dec a) (dec b))
        ((fn slice-sub2 [coll b]
          (if (or (empty? coll) (= b 0))
            '()
            (conj (slice-sub2 (rest coll) (dec b)) (first coll))))
-        coll b)
-       (slice-sub1 (rest coll) (dec a) (dec b))))
+        coll b)))
    coll a b))
 
 ;; P19 (**) Rotate a list N places to the left.
@@ -296,10 +297,10 @@
 
 (defn remove-at [coll n]
   (apply concat ((fn remove-at-sub [x n]
-                   (if (or (empty? x) (= n 1))
-                     (list '() (rest x))
+                   (if (and (seq x) (> n 1))
                      (let [[a b] (remove-at-sub (rest x) (dec n))]
-                       (list (conj a (first x)) b))))
+                       (list (conj a (first x)) b))
+                     (list '() (rest x))))
                  coll n)))
 
 ;; P21 (*) Insert an element at a given position into a list.
@@ -309,10 +310,10 @@
 
 (defn insert-at [elem coll n]
   ((fn insert-at-sub [e x n]
-     (if (or (empty? x) (= n 1))
-       (conj x e)
+     (if (and (seq x) (> n 1))
        (let [y (insert-at-sub e (rest x) (dec n))]
-         (conj y (first x)))))
+         (conj y (first x)))
+       (conj x e)))
    elem coll n))
 
 ;; P22 (*) Create a list containing all integers within a given range.
