@@ -118,10 +118,10 @@
 ;; (A B C A D E)
 
 (defn compress [coll]
-  (let [skip (fn [a x]
-               (if (= (first x) a)
-                 (recur a (rest x))
-                 x))]
+  (letfn [(skip [a x]
+            (if (= (first x) a)
+              (recur a (rest x))
+              x))]
     (if (seq coll)
       ;; TODO: use recur
       (cons (first coll) (compress (skip (first coll) (rest coll))))
@@ -135,13 +135,13 @@
 ;; ((A A A A) (B) (C C) (A A) (D) (E E E E))
 
 (defn pack [coll]
-  (let [pack-sub (fn [x]
-                   (loop [a (first x) y (list (first x)) z (rest x)]
-                     (if (seq z)
-                       (if (= (first z) a)
-                         (recur a (conj y a) (rest z))
-                         [y z])
-                       [y z])))]
+  (letfn [(pack-sub [x]
+            (loop [a (first x) y (list (first x)) z (rest x)]
+              (if (seq z)
+                (if (= (first z) a)
+                  (recur a (conj y a) (rest z))
+                  [y z])
+                [y z])))]
     (if (seq coll)
       (let [[x y] (pack-sub coll)]
         ;; use recur
@@ -199,14 +199,14 @@
 ;; ((4 A) B (2 C) (2 A) D (4 E))
 
 (defn encode-direct [coll]
-  (let [encode-sub (fn [x]
-                     (let [a (first x)]
-                       (loop [n 1 y (rest x)]
-                         (if (seq y)
-                           (if (= (first y) a)
-                             (recur (inc n) (rest y))
-                             [(if (= n 1) a (list n a)) y])
-                           [(if (= n 1) a (list n a)) y]))))]
+  (letfn [(encode-sub [x]
+            (let [a (first x)]
+              (loop [n 1 y (rest x)]
+                (if (seq y)
+                  (if (= (first y) a)
+                    (recur (inc n) (rest y))
+                    [(if (= n 1) a (list n a)) y])
+                  [(if (= n 1) a (list n a)) y]))))]
     (if (seq coll)
       (let [[x y] (encode-sub coll)]
         (cons x (encode-direct y)))
@@ -386,8 +386,8 @@
   (if (or (= n 0) (< (count coll) n))
     nil
     (if (= n 1)
-      (map (fn [x] (list x)) coll)
+      (map list coll)
       (let [ret-for-skip (combination n (rest coll))
             ret-with-first (combination (dec n) (rest coll))]
-        (concat (map (fn [x] (conj x (first coll))) ret-with-first)
+        (concat (map #(conj % (first coll)) ret-with-first)
                 ret-for-skip)))))
